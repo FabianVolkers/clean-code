@@ -1,20 +1,24 @@
 import re
 import random
 
-# log/cups/
-def get_path_part(sFilename):
-    if len(sFilename) > 0 and sFilename[len(sFilename) - 1] == '/':
-        return sFilename
-
+def check_path(filename):
     try:
         #integer is index where the last slash is found
-        integer = int(sFilename.rindex('/'))
-    except:
-        integer = -1
+        index = filename.rindex('/')
+    except ValueError:
+        index = -1
+    
+    return index
+
+def get_dir(filename):
+    if len(filename) > 0 and filename[-1] == '/':
+        return filename
+
+    index = check_path(filename)
 
     dirName = ''
-    if integer >= 0:
-        dirName = sFilename[0: integer + 1]
+    if index >= 0:
+        dirName = filename[0: index + 1]
     else:
         dirName = ''
 
@@ -43,10 +47,10 @@ def getEndOfFile(sFilename):
     return ''
 
 
-assert(get_path_part("log/cups/access_log") == "log/cups/")
-assert(get_path_part("log/cups/") == "log/cups/")
-assert(get_path_part("cups/access_log") == "cups/")
-assert(get_path_part("access_log") == "")
+assert(get_dir("log/cups/access_log") == "log/cups/")
+assert(get_dir("log/cups/") == "log/cups/")
+assert(get_dir("cups/access_log") == "cups/")
+assert(get_dir("access_log") == "")
 assert(getFilenamePart("log/cups/access_log") == "access_log")
 assert(getFilenamePart("log/cups/") == "")
 assert(getFilenamePart("cups/access_log") == "access_log")
